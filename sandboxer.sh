@@ -6,25 +6,42 @@ if [ -z "$SANDBOXER_ROOT" ]; then
 fi
 
 _activate() {
-    if [ -e $SANDBOXER_ROOT/$1 ]; then
-        export SANDBOXER_BOX=$1
-    else
-        echo "$SANDBOXER_ROOT/$1 does not exist";
+    if [ ! -e $SANDBOXER_ROOT/$1 ]; then
+        echo "$SANDBOXER_ROOT/$1 does not exist"
+        return
     fi
+
+    export SANDBOXER_BOX=$1
+    export SANDBOXER_OLD_PATH=$PATH
+    export SANDBOXER_REAL_CABAL_DEV=$(which cabal-dev)
+    export PATH=$SANDBOXER_ROOT/$SANDBOXER_BOX/sandboxer:$PATH
+}
+
+_deactivate() {
+    if [ -z "$SANDBOXER_BOX" ]; then
+        echo "Not currently in a sandbox."
+        return
+    fi
+
+    echo "Deactivating sandbox $SANDBOXER_BOX."
+
+    export PATH=$SANDBOXER_OLD_PATH
+    unset SANDBOXER_REAL_CABAL_DEV
+    unset SANDBOXER_BOX
 }
 
 function sandboxer() {
     case $1 in
         init)
             echo "Making sandbox $2"
-            mkdir ~/.sandboxer/$2
+            mkdir -p ~/.sandboxer/$2/sandboxer
             _activate $2
             ;;
         activate)
             _activate $2
             ;;
         deactivate)
-            unset SANDBOXER_BOX
+            _deactivate $2
             ;;
         *)
             cat <<EOF
@@ -40,3 +57,5 @@ EOF
     esac
 
 }
+
+
