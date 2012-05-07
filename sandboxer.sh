@@ -36,8 +36,13 @@ function sandboxer() {
             echo "Making sandbox $2"
             local sandbox=$HOME/.sandboxer/$2
             mkdir -p $sandbox/sandboxer
+
+            # activate first so we get SANDBOXER_REAL_CABAL_DEV
             _activate $2
             local target=$sandbox/sandboxer/cabal-dev
+            # create the fake cabal-dev file, escaping the
+            # REAL_CABAL_DEV so that moving cabal-dev around doesn't
+            # completely break existing cabal-dev sandboxes
             cat > $target <<EOF
 #!/bin/bash
 \$SANDBOXER_REAL_CABAL_DEV \$* --sandbox=$sandbox
