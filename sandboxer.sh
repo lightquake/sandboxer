@@ -34,8 +34,16 @@ function sandboxer() {
     case $1 in
         init)
             echo "Making sandbox $2"
-            mkdir -p ~/.sandboxer/$2/sandboxer
+            local sandbox=$HOME/.sandboxer/$2
+            mkdir -p $sandbox/sandboxer
             _activate $2
+            local target=$sandbox/sandboxer/cabal-dev
+            cat > $target <<EOF
+#!/bin/bash
+\$SANDBOXER_REAL_CABAL_DEV \$* --sandbox=$sandbox
+EOF
+            chmod 0755 $target;
+            hash -r
             ;;
         activate)
             _activate $2
