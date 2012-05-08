@@ -1,3 +1,10 @@
+# About
+
+`sandboxer` is a wrapper around `cabal-dev` that overrides the default
+sandbox location with one of your choice. This way, multiple projects
+can share the same sandbox, even if your development/build environment
+doesn't provide options for specifying the cabal-dev sandbox.
+
 # Installation
 
 Put `source path/to/sandboxer.sh` somewhere in your shell init
