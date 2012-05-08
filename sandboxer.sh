@@ -26,7 +26,6 @@ _activate() {
     local system=$(cabal-dev ghc-pkg list | grep "^/" | head -n 1)
     local user=$(cabal-dev ghc-pkg list | grep "^/" | tail -n 1)
     export GHC_PACKAGE_PATH="$user${system%?}"
-    echo "GHC_PACKAGE_PATH set to ${GHC_PACKAGE_PATH}. If this isn't what you want, unset GHC_PACKAGE_PATH."
 }
 
 _deactivate() {
