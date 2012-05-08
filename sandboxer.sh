@@ -11,6 +11,10 @@ _activate() {
         return
     fi
 
+    if [ ! -z "$SANDBOXER_BOX" ]; then
+        _deactivate
+    fi
+
     export SANDBOXER_BOX=$1
     export SANDBOXER_OLD_PATH=$PATH
     export SANDBOXER_OLD_GHC_PACKAGE_PATH=$GHC_PACKAGE_PATH
@@ -22,6 +26,7 @@ _activate() {
     local system=$(cabal-dev ghc-pkg list | grep "^/" | head -n 1)
     local user=$(cabal-dev ghc-pkg list | grep "^/" | tail -n 1)
     export GHC_PACKAGE_PATH="$user${system%?}"
+    echo "GHC_PACKAGE_PATH set to ${GHC_PACKAGE_PATH}. If this isn't what you want, unset GHC_PACKAGE_PATH."
 }
 
 _deactivate() {
