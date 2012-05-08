@@ -13,8 +13,15 @@ _activate() {
 
     export SANDBOXER_BOX=$1
     export SANDBOXER_OLD_PATH=$PATH
+    export SANDBOXER_OLD_GHC_PACKAGE_PATH=$GHC_PACKAGE_PATH
     export SANDBOXER_REAL_CABAL_DEV=$(which cabal-dev)
     export PATH=$SANDBOXER_ROOT/$SANDBOXER_BOX/sandboxer:$PATH
+
+    # we need to set GHC_PACKAGE_PATH, and when run non-interactively
+    # ghc-pkg list includes colons at the end
+    local system=$(cabal-dev ghc-pkg list | grep "^/" | head -n 1)
+    local user=$(cabal-dev ghc-pkg list | grep "^/" | tail -n 1)
+    export GHC_PACKAGE_PATH="$user${system%?}"
 }
 
 _deactivate() {
@@ -26,8 +33,11 @@ _deactivate() {
     echo "Deactivating sandbox $SANDBOXER_BOX."
 
     export PATH=$SANDBOXER_OLD_PATH
+    export GHC_PACKAGE_PATH=$SANDBOXER_OLD_GHC_PACKAGE_PATH
     unset SANDBOXER_REAL_CABAL_DEV
     unset SANDBOXER_BOX
+    unset SANDBOXER_OLD_PATH
+
 }
 
 function sandboxer() {
