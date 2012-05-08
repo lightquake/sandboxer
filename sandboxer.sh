@@ -19,7 +19,7 @@ _activate() {
     export SANDBOXER_OLD_PATH=$PATH
     export SANDBOXER_OLD_GHC_PACKAGE_PATH=$GHC_PACKAGE_PATH
     export SANDBOXER_REAL_CABAL_DEV=$(which cabal-dev)
-    export PATH=$SANDBOXER_ROOT/$SANDBOXER_BOX/sandboxer:$PATH
+    export PATH=$SANDBOXER_ROOT/$SANDBOXER_BOX/bin:$SANDBOXER_ROOT/$SANDBOXER_BOX/sandboxer:$PATH
 
     # we need to set GHC_PACKAGE_PATH, and when run non-interactively
     # ghc-pkg list includes colons at the end
