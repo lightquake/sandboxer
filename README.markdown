@@ -14,8 +14,8 @@ mode 0644.
 
 # Usage
 
-`sandbox init name` creates a new sandbox. `sandbox activate name`
-activates that sandbox, and `sandbox deactivate` deactivates the
+`sandboxer init name` creates a new sandbox. `sandboxer activate name`
+activates that sandbox, and `sandboxer deactivate` deactivates the
 current sandbox. Sandboxes are created in ~/.sandboxer by default, but
 you can set `$SANDBOXER_ROOT` to override this.
 
